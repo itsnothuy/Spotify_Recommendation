@@ -1,6 +1,6 @@
 // tests/emotionRoute.test.js
 const request = require('supertest');
-const app = require('../server');
+const app = require('../../server');
 const axios = require('axios');
 
 // Mock axios to avoid real calls
