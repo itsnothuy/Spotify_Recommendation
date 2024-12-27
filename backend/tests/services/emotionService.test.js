@@ -1,5 +1,5 @@
 // tests/emotionService.test.js
-const { detectEmotion } = require('../services/emotionService');
+const { detectEmotion } = require('../../services/emotionService');
 const axios = require('axios');
 
 // Jest mock for axios
