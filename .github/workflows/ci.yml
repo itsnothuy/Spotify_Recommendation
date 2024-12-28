@@ -1,0 +1,92 @@
+name: Node.js CI Pipeline
+
+on:
+  push:
+    branches: [ main ] # Runs tests when code is pushed to 'main' branch
+  pull_request:
+    branches: [ main ] # Runs tests for PRs targeting 'main'
+
+env:
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  TIDAL_CLIENT_ID: ${{ secrets.TIDAL_CLIENT_ID }}
+  TIDAL_CLIENT_SECRET: ${{ secrets.TIDAL_CLIENT_SECRET }}
+
+jobs:
+  # --------------------------
+  # Backend Tests
+  # --------------------------
+  backend-tests:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend # Set backend directory
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+
+      - name: Generate Coverage Report
+        run: npm run test -- --coverage
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-coverage
+          path: backend/coverage/
+
+
+# --------------------------
+  # Frontend Tests
+  # --------------------------
+  frontend-tests:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend # Set frontend directory
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Linting
+        run: npm run lint # Ensure linting is configured in frontend
+
+      - name: Build Project
+        run: npm run build # Test the build process
+
+  # --------------------------
+  # Deploy (Optional)
+  # --------------------------
+  deploy:
+    needs: [backend-tests, frontend-tests] # Only run if tests pass
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Production (Example)
+        run: echo "Deploying to production..."
