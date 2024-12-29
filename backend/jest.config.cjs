@@ -3,4 +3,5 @@ module.exports = {
     '^.+\\.js$': 'babel-jest',
   },
   testEnvironment: 'node',
+  moduleFileExtensions: ["js", "jsx", "json", "node"],
 };

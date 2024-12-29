@@ -1,21 +1,22 @@
-const express = require("express");
+// routes/emotionRoute.js (ESM)
+import express from 'express';
+import { detectEmotion } from '../services/emotionService.js';
+
 const router = express.Router();
-const { detectEmotion } = require("../services/emotionService");
 
-// POST: Predict emotion
-router.post("/predict-emotion", async (req, res) => {
+router.post('/', async (req, res) => {
   const { text } = req.body;
-
   if (!text) {
-    return res.status(400).json({ error: "Text is required" });
+    return res.status(400).json({ error: 'Missing text field' });
   }
 
   try {
-    const emotion = await detectEmotion(text);
-    res.json({ emotion });
+    const mood = await detectEmotion(text);
+    return res.json({ mood });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error detecting emotion:', error.message);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-module.exports = router;
+export default router;

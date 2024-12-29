@@ -1,57 +1,55 @@
+// server/services/chatgptService.js
+import axios from 'axios';
 
-const dotenv = require('dotenv');
-
-// Load environment variables
-dotenv.config();
-
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 /**
- * Generates a response from OpenAI's ChatGPT API based on provided messages and optional system instructions.
- * @param {Array} messages - Chat history array [{ role: 'user', content: 'message' }].
- * @param {string} [systemPrompt] - Optional system-level prompt to guide ChatGPT behavior.
- * @returns {Promise<string>} - The AI-generated response.
+ * Calls the OpenAI ChatGPT API to get a response.
+ * @param {Array} messages - Array of messages in the format [{ role: 'user'|'assistant'|'system', content: '...' }, ...].
+ * @param {string} systemPrompt - The system prompt that sets the context for ChatGPT.
+ * @returns {string} - The assistant's reply.
  */
-const callChatGPT = async (messages, systemPrompt = '') => {
-  if (!messages || !Array.isArray(messages) || messages.length === 0) {
-    throw new Error("Invalid 'messages': Array cannot be empty.");
-  }
+export async function getSongRecommendations(userText, mood) {
+  const systemPrompt = `
+    You are a music expert. Based on the mood: "${mood}",
+    provide 5 song suggestions with title and artist. 
+    The final result should be a JSON list with { "title", "artist" } objects.
+  `;
+
+  const userPrompt = userText || 'No user text provided';
+
   try {
-    console.log('Sending request to OpenAI...');
+    const response = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        model: 'gpt-3.5-turbo',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ],
+        temperature: 0.7
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${OPENAI_API_KEY}`
+        }
+      }
+    );
 
-    // Prepare message array, including an optional system prompt
-    const formattedMessages = [];
-    if (systemPrompt) {
-      formattedMessages.push({ role: 'system', content: systemPrompt });
+    const content = response.data.choices[0].message.content;
+    let songs;
+
+    try {
+      songs = JSON.parse(content);
+    } catch (err) {
+      console.warn('Failed to parse JSON from ChatGPT. Raw content:', content);
+      songs = [];
     }
-    formattedMessages.push(...messages);
 
-    // Make the API call to OpenAI
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini', // Change this to 'gpt-4o-mini' or another model as needed
-      messages: formattedMessages,
-      max_tokens: 300, // Adjust token limit based on expected response length
-      temperature: 0.7, // Adjust temperature for creativity level
-      top_p: 0.9,
-    });
-
-    // Debug log for the entire response
-    console.log('Response from OpenAI:', JSON.stringify(response, null, 2));
-
-    // Extract and return the AI-generated message
-    const aiMessage = response.choices[0].message.content;
-    console.log('Extracted AI Message:', aiMessage);
-    return aiMessage.trim();
+    return songs;
   } catch (error) {
-    console.error('Error calling OpenAI API:', error);
-    throw new Error('Failed to generate AI response.');
+    console.error('Error calling OpenAI API:', error.message);
+    return [];
   }
-};
-  
-module.exports = { callChatGPT };
-  
+}
