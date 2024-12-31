@@ -31,3 +31,4 @@ describe('emotionRoute', () => {
     expect(response.body.error).toBe('Missing text field');
   });
 });
+
