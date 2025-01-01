@@ -11,6 +11,7 @@ export default {
         'fade-in': 'fadeIn 0.5s ease forwards', // Initial fade-in animation
         'fade-in-search': 'fadeInSearch 0.6s ease forwards', // Added fade-in-search animation
         'move-up': 'moveUp 0.5s ease forwards', // Move-up animation for text
+        'scroll-text': 'scrollText 10s linear infinite',
       },
       keyframes: {
         fadeIn: {
@@ -24,6 +25,10 @@ export default {
         moveUp: {
           '0%': { transform: 'translateY(0)' },
           '100%': { transform: 'translateY(-50px)' },
+        },
+        scrollText: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-100%)' },
         },
       },
       colors: {

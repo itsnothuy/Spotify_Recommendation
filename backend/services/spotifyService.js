@@ -38,7 +38,7 @@ async function getSpotifyAccessToken() {
   }
 }
 
-export async function searchTrack(title, artist) {
+export async function searchTrack(title, artist, album) {
   try {
     const token = await getSpotifyAccessToken();
 
@@ -46,6 +46,10 @@ export async function searchTrack(title, artist) {
     if (artist) {
       query += ` artist:${artist}`;
     }
+    if (album) {
+      query += ` album:"${album}"`;
+    }
+
 
     const url = `https://api.spotify.com/v1/search?${querystring.stringify({
       q: query,
@@ -69,6 +73,7 @@ export async function searchTrack(title, artist) {
       spotify_id: track.id,
       title: track.name,
       artist: track.artists.map(a => a.name).join(', '),
+      album: track.album.name,
       album_art_url: track.album.images.length > 0 ? track.album.images[0].url : null,
       preview_url: track.preview_url
     };

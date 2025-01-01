@@ -1,35 +1,29 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import { PlusCircledIcon } from '@radix-ui/react-icons';
 
-// Replace this with your actual backend URL if running on a different port or domain.
-const BACKEND_URL = "http://localhost:58544"; 
+const BACKEND_URL = "http://localhost:54132"; 
 
 const TextAnimation = () => {
-  const text = "Fancy Text Animation"; // Replace this with your desired text
+  const text = "Fancy Text Animation";
   const [showSearchBar, setShowSearchBar] = useState(false);
-
-  // NEW: track user input and recommended songs
   const [searchTerm, setSearchTerm] = useState("");
   const [recommendedSongs, setRecommendedSongs] = useState([]);
   const [mood, setMood] = useState("");
 
   useEffect(() => {
-    // Show the search bar after the text animation finishes
     const timer = setTimeout(() => {
       setShowSearchBar(true);
-    }, text.length * 50 + 600); // Delay based on text animation duration
+    }, text.length * 50 + 600);
 
     return () => clearTimeout(timer);
   }, [text]);
 
-  // NEW: function to handle search
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
 
     try {
-      // Send a POST request to your backend route. 
-      // In the earlier example, we used "/api/spotify/mood".
       const response = await fetch(`${BACKEND_URL}/api/spotify/mood`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -37,7 +31,6 @@ const TextAnimation = () => {
       });
       const data = await response.json();
 
-      // data should look like: { mood: "...", recommendedSongs: [...] }
       if (data.error) {
         console.error("Backend error:", data.error);
         return;
@@ -50,7 +43,6 @@ const TextAnimation = () => {
     }
   };
 
-
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-gray-900">
       <h1 className="text-white text-4xl font-sans text-center">
@@ -59,14 +51,14 @@ const TextAnimation = () => {
             key={index}
             className="inline-block opacity-0 animate-fade-in text-animation"
             style={{
-              animationDelay: `${index * 50}ms`, // Smoother delay for each character
+              animationDelay: `${index * 50}ms`,
             }}
           >
-            {char === " " ? "\u00A0" : char} {/* Handles spaces */}
+            {char === " " ? "\u00A0" : char}
           </span>
         ))}
       </h1>
-      {/* Search Bar (shown after animation) */}
+
       {showSearchBar && (
         <div className="mt-8 w-full max-w-md">
           <div className="relative">
@@ -75,9 +67,9 @@ const TextAnimation = () => {
               placeholder="Search"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyDown={(e) => { // Changed to onKeyDown
+              onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  handleSearch(); // Trigger search on Enter key
+                  handleSearch();
                 }
               }}
               className="w-full py-3 pl-4 pr-10 text-white bg-gray-800 rounded-full 
@@ -94,8 +86,6 @@ const TextAnimation = () => {
         </div>
       )}
 
-
-      {/* Show Mood & Recommended Songs (if any) */}
       {mood && (
         <p className="text-white mt-4">
           Detected Mood: <strong>{mood}</strong>
@@ -103,36 +93,58 @@ const TextAnimation = () => {
       )}
 
       {recommendedSongs.length > 0 && (
-        <div className="mt-6 w-full max-w-md text-white">
-          <h2 className="text-xl mb-2">Recommended Songs:</h2>
-          {recommendedSongs.map((song) => (
-            <div
-              key={song.spotify_id}
-              className="flex items-center border-b border-gray-700 py-2"
-            >
-              {/* Album Cover */}
-              {song.album_art_url && (
-                <img
-                  src={song.album_art_url}
-                  alt={song.title}
-                  className="w-16 h-16 object-cover mr-4"
-                />
-              )}
-              <div className="flex flex-col">
-                <span className="font-semibold">{song.title}</span>
-                <span className="text-sm text-gray-400">{song.artist}</span>
-                {/* Optional: preview audio if available */}
-                {song.preview_url && (
-                  <audio
-                    controls
-                    src={song.preview_url}
-                    className="mt-1"
-                    style={{ width: "200px" }}
+        <div className="container mt-4 flex flex-col items-center justify-center">
+          <div className="overflow-auto" style={{ maxHeight: "400px" }}>
+            {recommendedSongs.map((song, index) => (
+              <a
+                key={index}
+                href="#"
+                className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 mb-3"
+              >
+                <div className="aspect-square w-28 ml-2 flex-shrink-0">
+                  <img
+                    className="object-cover w-full h-full rounded-lg"
+                    src={song.album_art_url}
+                    alt={song.title}
                   />
-                )}
-              </div>
-            </div>
-          ))}
+                </div>
+                <div className="flex flex-col justify-between p-4 leading-normal w-full">
+                  <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"
+                    style={{
+                      display: 'inline-block',
+                      maxWidth: '300px',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    <span className={song.title.length > 30 ? 'inline-block animate-scroll-text' : ''}
+                      style={{ animationDelay: '5s' }}
+                    >
+                      {song.title}
+                    </span>
+                  </h5>
+                  <p className="mb-1 font-normal text-gray-700 dark:text-gray-400">
+                    Artist: {song.artist}
+                  </p>
+                  <p className="font-normal text-gray-700 dark:text-gray-400">
+                    Album: {song.album}
+                  </p>
+                </div>
+                <div className="p-4 flex-shrink-0">
+                  <button
+                    onClick={() => {
+                      console.log(`Add song: ${song.title}`);
+                    }}
+                    className="flex items-center justify-center w-8 h-8
+                     rounded-full hover:bg-white hover:text-gray-800 text-white"
+                  >
+                    <PlusCircledIcon className="w-12 h-12" />
+                  </button>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       )}
 
