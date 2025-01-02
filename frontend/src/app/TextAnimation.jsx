@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { PlusCircledIcon } from '@radix-ui/react-icons';
 
+
 const BACKEND_URL = "http://localhost:54132"; 
 
 const TextAnimation = () => {
@@ -94,20 +95,40 @@ const TextAnimation = () => {
 
       {recommendedSongs.length > 0 && (
         <div className="container mt-4 flex flex-col items-center justify-center">
-          <div className="overflow-auto" style={{ maxHeight: "400px" }}>
+          <div className="overflow-auto p-4" style={{ maxHeight: "700px", scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
             {recommendedSongs.map((song, index) => (
               <a
                 key={index}
                 href="#"
-                className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 mb-3"
+                className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 mb-3 hover:scale-105 hover:p-2 hover:rounded-lg transition-transform duration-200"
               >
-                <div className="aspect-square w-28 ml-2 flex-shrink-0">
+                <div className="relative w-28 h-28 ml-2 flex-shrink-0">
                   <img
                     className="object-cover w-full h-full rounded-lg"
                     src={song.album_art_url}
                     alt={song.title}
                   />
+
+                  <img
+                      className='rounded-full object-cover'
+                      src="/logo.jpg"
+                      alt="Spotify Logo"
+                      style={{
+                        position: 'absolute',
+                        bottom: '5px',
+                        right: '4px',
+                        width: '20px',
+                        height: '20px',
+                        backgroundColor: '#000',
+                        boxShadow: '0 2px 3px rgba(0,0,0,0.2)'
+                      }}
+                    />
+                  
+                  
                 </div>
+
+                  
+
                 <div className="flex flex-col justify-between p-4 leading-normal w-full">
                   <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"
                     style={{
