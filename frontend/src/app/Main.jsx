@@ -3,15 +3,15 @@
 import React, { useEffect, useState } from "react";
 import MusicList from "./pages/MusicList";
 import LoadingPage from "./pages/LoadingPage";
-import TitleAnimation from "./pages/TitleAnimation";
-import SearchBar from "./pages/SearchBar";
+import Tile from "./pages/Title";
+import SearchBar from "./components/SearchBar";
 import GradientBackground from "./GradientBackground";
 
 
 
 const BACKEND_URL = "http://localhost:61834";
 
-export default function TextAnimation() {
+export default function Main() {
   const text = "MusicFinder ♪";
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -66,9 +66,7 @@ export default function TextAnimation() {
 
   // If we haven't fetched or we're loading → use "default".
   // Once mood is fetched → use that mood.
-  // const currentTheme = !fetched || isLoading ? "default" : mood;
-  const currentTheme = "anxious";
-  
+  const currentTheme = !fetched || isLoading ? "default" : mood;  
 
 
   // If you want to set data-theme on <html>:
@@ -76,11 +74,31 @@ export default function TextAnimation() {
     document.documentElement.setAttribute("data-theme", currentTheme);
   }, [currentTheme]);
 
+  // A function to reset state so we go "back" to the initial view
+  const handleBack = () => {
+    setHideTitleAndSearch(false);
+    setShowSearchBar(false);
+    setSearchTerm("");
+    setRecommendedSongs([]);
+    setFetched(false);
+    setMood("");
+    setIsLoading(false);
+
+    // If you also want to re-trigger the Title animation:
+    // (1) you could do it by re-running that setTimeout code, 
+    // or simply rely on re-mount. For instance:
+    const timer = setTimeout(() => {
+      setShowSearchBar(true);
+    }, text.length * 50 + 600);
+    // Clear that if user leaves
+    return () => clearTimeout(timer);
+  };
+
   return (
     <div className="fixed h-screen flex flex-col items-center justify-center inset-0" data-theme={currentTheme} >
       <GradientBackground/>
       {/* Only show the Title & SearchBar if hideTitleAndSearch is false */}
-      <div className="z-30">
+
       {!hideTitleAndSearch && (
         <>
         {/* {you should add the default background here} */}
@@ -91,7 +109,7 @@ export default function TextAnimation() {
             transform: "translate(-50%, -60%)",
           }}
         > 
-          <TitleAnimation text={text} />
+          <Tile text={text} />
         </div>
 
 
@@ -118,16 +136,14 @@ export default function TextAnimation() {
       )}
 
       {/* If we’re loading, show loading page; otherwise show MusicList */}
-      {/* {you should still add the default background here} */}
       {isLoading ? (
-        <LoadingPage />
+        <LoadingPage/>
       ) : (
         <>
         {/* {you add the background based on mood that fetched from backend here} */}
-        <MusicList mood={mood} recommendedSongs={recommendedSongs} fetched={fetched} /></>
+        <MusicList mood={mood} recommendedSongs={recommendedSongs} fetched={fetched} onBack={handleBack}/></>
         
       )}
-      </div>
     </div>
     
   );

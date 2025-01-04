@@ -4,7 +4,7 @@ import React from "react";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 
 
-const MusicList = ({ mood, recommendedSongs, fetched }) => {
+const MusicList = ({ mood, recommendedSongs, fetched, onBack }) => {
   return (
     <>
       
@@ -12,9 +12,12 @@ const MusicList = ({ mood, recommendedSongs, fetched }) => {
       {fetched && recommendedSongs.length > 0 && (
         <div className="absolute container mt-4 flex flex-col items-center justify-center ">
           {mood && (
+            <>
+            <h1 className=" text-white text-5xl font-bold font-sans text-center animate-slide-up">Here's your curated list</h1>
             <p className="text-white mt-4 items-center">
-                Detected Mood: <strong>{mood}</strong>
+                You seem to be: <strong>{mood}</strong>
             </p>
+            </>
         )}
         <div
             className="overflow-hidden p-4"
@@ -102,6 +105,10 @@ const MusicList = ({ mood, recommendedSongs, fetched }) => {
               </a>
             ))}
           </div>
+
+          <button className="text-white mt-2 items-center" onClick={onBack}>
+              <u>Back</u>
+          </button>
         </div>
       )}
     </>

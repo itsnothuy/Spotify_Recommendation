@@ -1,11 +1,11 @@
 import React from 'react';
-import TextAnimation from './TextAnimation';
+import Main from './Main';
 
 
 function App() {
   return (
     <div>
-      <TextAnimation />
+      <Main />
     </div>
   );
 }

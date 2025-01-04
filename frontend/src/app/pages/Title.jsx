@@ -8,9 +8,9 @@ import React from "react";
  * @param {string} text - The string to animate.
  * @param {number} textDelay - Milliseconds between each character's animation.
  */
-const TitleAnimation = ({ text, textDelay = 50 }) => {
+const Tile = ({ text, textDelay = 50 }) => {
   return (
-    <h1 className="text-blue text-4xl font-bold font-sans text-center"
+    <h1 className="text-white text-5xl font-bold font-sans text-center"
     >
       {text.split("").map((char, index) => (
         <span
@@ -27,4 +27,4 @@ const TitleAnimation = ({ text, textDelay = 50 }) => {
   );
 };
 
-export default TitleAnimation;
+export default Tile;
