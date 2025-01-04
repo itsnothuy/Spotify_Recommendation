@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import MusicList from "./pages/MusicList";
 import LoadingPage from "./pages/LoadingPage";
 import TitleAnimation from "./pages/TitleAnimation";
-import SearchBar from "./SearchBar";
+import SearchBar from "./pages/SearchBar";
 import GradientBackground from "./GradientBackground";
 
 
@@ -66,7 +66,8 @@ export default function TextAnimation() {
 
   // If we haven't fetched or we're loading → use "default".
   // Once mood is fetched → use that mood.
-  const currentTheme = !fetched || isLoading ? "default" : mood;
+  // const currentTheme = !fetched || isLoading ? "default" : mood;
+  const currentTheme = "anxious";
   
 
 

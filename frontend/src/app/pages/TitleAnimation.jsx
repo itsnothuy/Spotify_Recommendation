@@ -10,7 +10,7 @@ import React from "react";
  */
 const TitleAnimation = ({ text, textDelay = 50 }) => {
   return (
-    <h1 className="text-white/80 text-4xl font-bold font-sans text-center opacity-90"
+    <h1 className="text-blue text-4xl font-bold font-sans text-center"
     >
       {text.split("").map((char, index) => (
         <span

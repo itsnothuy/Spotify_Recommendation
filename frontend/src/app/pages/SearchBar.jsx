@@ -27,7 +27,7 @@ const SearchBar = ({ showSearchBar, searchTerm, setSearchTerm, handleSearch }) =
             }
           }}
           className="w-full py-3 pl-4 pr-10 text-white bg-gray-800/50 rounded-full 
-                    animate-fade-in-search focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                    animate-fade-in-search placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
         />
         <button
           className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white"

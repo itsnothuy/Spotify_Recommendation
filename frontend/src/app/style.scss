@@ -34,6 +34,73 @@ html, body {
     --circle-size: 80%;
     --blending: hard-light;
   }
+
+  /* ================= THEME: Sadness 😢 ================= */
+  :root[data-theme="sad"] {
+  --color-bg1: rgb(0, 31, 63);        /* navy */
+  --color-bg2: rgb(10, 61, 98);       /* teal-ish */
+  --color1: 0, 76, 153;               /* deeper blue */
+  --color2: 30, 130, 160;             /* cool teal */
+  --color3: 50, 100, 150;             /* slightly lighter teal */
+  --color4: 20, 40, 60;               /* darkest navy accent */
+  --color5: 80, 120, 160;             /* softer muted teal */
+  --color-interactive: 60, 100, 160;
+  --circle-size: 80%;
+  --blending: hard-light;
+}
+/* ================= THEME: Joy 😃 ================= */
+:root[data-theme="happy"] {
+  --color-bg1: rgb(255, 0, 0);      /* near "sunshine" */
+  --color-bg2: rgb(71, 50, 0);      /* golden orange */
+  --color1: 255, 255, 0;              /* bright lemon-yellow */
+  --color2: 255, 218, 33;             /* warmer, golden yellow */
+  --color3: 255, 230, 100;            /* lighter, sunny shade */
+  --color4: 255, 200, 0;              /* deeper golden accent */
+  --color5: 255, 240, 150;            /* pale creamy yellow */
+  --color-interactive: 255, 215, 10;
+  --circle-size: 80%;
+  --blending: hard-light;
+}
+/* ================= THEME: Anger 😡 ================= */
+:root[data-theme="angry"] {
+  --color-bg1: rgb(255, 59, 59);      /* bright red */
+  --color-bg2: rgb(199, 0, 0);        /* deeper crimson */
+  --color1: 255, 0, 0;                /* pure red */
+  --color2: 200, 50, 50;              /* slightly darker red */
+  --color3: 255, 80, 80;              /* bright accent red */
+  --color4: 180, 30, 30;              /* deeper red */
+  --color5: 255, 150, 150;            /* lighter "pinkish" red highlight */
+  --color-interactive: 220, 70, 70;
+  --circle-size: 80%;
+  --blending: hard-light;
+}
+
+/* ================= THEME: Fear 😱 ================= */
+:root[data-theme="anxious"] {
+  --color-bg1: rgb(50, 50, 50);       /* near charcoal */
+  --color-bg2: rgb(100, 100, 100);    /* smoky gray */
+  --color1: 30, 30, 30;               /* almost black */
+  --color2: 80, 80, 80;               /* medium dark gray */
+  --color3: 120, 120, 120;            /* mid-gray */
+  --color4: 160, 160, 160;            /* lighter gray */
+  --color5: 200, 200, 200;            /* pale gray highlight */
+  --color-interactive: 110, 110, 110;
+  --circle-size: 80%;
+  --blending: hard-light;
+}
+/* ================= THEME: Surprise 😯 ================= */
+:root[data-theme="surprised"] {
+  --color-bg1: rgb(138, 43, 226);     /* blue-violet */
+  --color-bg2: rgb(147, 112, 219);    /* medium purple */
+  --color1: 128, 0, 128;              /* pure purple */
+  --color2: 178, 102, 255;            /* bright lavender */
+  --color3: 153, 50, 204;             /* dark orchid */
+  --color4: 203, 153, 255;            /* light violet accent */
+  --color5: 235, 207, 255;            /* pale lavender highlight */
+  --color-interactive: 160, 100, 220;
+  --circle-size: 80%;
+  --blending: hard-light;
+}
   
   @keyframes moveInCircle {
     0% { transform: rotate(0deg); }
