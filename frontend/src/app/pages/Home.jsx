@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import MusicList from "./pages/MusicList";
-import LoadingPage from "./pages/LoadingPage";
-import Tile from "./pages/Title";
-import SearchBar from "./components/SearchBar";
-import GradientBackground from "./GradientBackground";
+import MusicList from "../components/MusicList";
+import LoadingPage from "./LoadingPage";
+import Tile from "../components/Title";
+import SearchBar from "../components/SearchBar";
+import GradientBackground from "../GradientBackground";
 
 
 
 const BACKEND_URL = "http://localhost:61834";
 
-export default function Main() {
+export default function Home() {
   const text = "MusicFinder ♪";
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
