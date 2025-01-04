@@ -1,6 +1,7 @@
 import React from 'react';
 import TextAnimation from './TextAnimation';
 
+
 function App() {
   return (
     <div>

@@ -70,7 +70,7 @@ import axios from 'axios';
 const EMOTION_TO_MOOD = {
   joy: 'happy',
   excitement: 'happy',
-  love: 'happy',
+  love: 'love',
   sadness: 'sad',
   anger: 'angry',
   fear: 'anxious',

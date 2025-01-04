@@ -2,20 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* :root {
+  --gradient: linear-gradient(45deg, #001fb6, purple, #15027e, rgb(207, 12, 12));
+} */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* body {
+  color: #333;
+  background: #ddd;
+  background-size: 300%;
+  background-image: var(--gradient);
+
+  animation: bg-animation 5s infinite;
+} */
+
+/* @keyframes bg-animation {
+  0% {
+    background-position: left;
   }
-}
+  50% {
+    background-position: right;
+  }
+  100% {
+    background-position: left;
+  }
+} */
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
