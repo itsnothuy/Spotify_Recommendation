@@ -1,19 +1,18 @@
-// start.js
 import app from './server.js';
 
-const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${server.address().port}`);
-  });
+const PORT = process.env.PORT || 3001;
 
+// Start the server
+const server = app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+// Handle server errors
 server.on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
-      console.warn(`Port ${PORT} is in use. Trying another port...`);
-      // Automatically find an available port
-      const dynamicServer = app.listen(0, () => {
-        console.log(`Server is now running on http://localhost:${dynamicServer.address().port}`);
-      });
+        console.error(`Port ${PORT} is already in use. Please use a different port.`);
+        process.exit(1); // Exit the process with an error code
     } else {
-      console.error('Server error:', err);
+        console.error('Server error:', err);
     }
 });

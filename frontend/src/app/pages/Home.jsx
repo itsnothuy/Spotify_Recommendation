@@ -9,7 +9,7 @@ import GradientBackground from "../GradientBackground";
 
 
 
-const BACKEND_URL = "http://localhost:61834";
+const BACKEND_URL = "http://localhost:60918";
 
 export default function Home() {
   const text = "MusicFinder ♪";
@@ -19,6 +19,8 @@ export default function Home() {
   const [mood, setMood] = useState("");
   const [fetched, setFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [accessToken, setAccessToken] = useState(""); // Store Spotify Access Token
+
 
   // NEW: This controls whether to hide the title & search bar
   const [hideTitleAndSearch, setHideTitleAndSearch] = useState(false);
@@ -33,6 +35,54 @@ export default function Home() {
   
     return () => clearTimeout(timer);
   }, [text]);
+
+
+  // Fetch the access token when the component loads
+  useEffect(() => {
+    const fetchAccessToken = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/spotify/refresh-token`);
+        const data = await response.json();
+        console.log(`Access token ${accessToken}`)
+        setAccessToken(data.access_token); // Store the token for later use
+      } catch (error) {
+        console.error("Error fetching Spotify access token:", error);
+      }
+    };
+    fetchAccessToken();
+  }, []);
+
+
+  // Function to save track to "Liked Songs"
+  const onSaveToLikedSongs = async (trackId) => {
+    if (!accessToken) {
+      alert("You need to log in to Spotify first!");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/spotify/likeTrack`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ trackId }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Song added to 'Liked Songs' successfully!");
+      } else {
+        alert("Failed to add song to 'Liked Songs'.");
+      }
+    } catch (error) {
+      console.error("Error saving song to Liked Songs:", error);
+      alert("Error adding song to 'Liked Songs'.");
+    }
+  };
+
+
   // Handle user input submission
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
@@ -131,7 +181,6 @@ export default function Home() {
           />
           </div>
         )}
-        
         </>
       )}
 
@@ -139,12 +188,14 @@ export default function Home() {
       {isLoading ? (
         <LoadingPage/>
       ) : (
-        <>
-        {/* {you add the background based on mood that fetched from backend here} */}
-        <MusicList mood={mood} recommendedSongs={recommendedSongs} fetched={fetched} onBack={handleBack}/></>
-        
+        <MusicList 
+          mood={mood} 
+          recommendedSongs={recommendedSongs} 
+          fetched={fetched} 
+          onBack={handleBack}
+          onSaveToLikedSongs={onSaveToLikedSongs}
+        />
       )}
     </div>
-    
   );
 }

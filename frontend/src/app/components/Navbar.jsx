@@ -11,7 +11,7 @@ const Navbar = () => {
     };
     return (
     <nav className="w-full fixed bg-white border-gray-200 rounded-lg backdrop-blur-md dark:bg-gray-900/5 z-10">
-        <div className="max-w-screen flex flex-wrap items-center justify-between mx-auto p-4">
+        <div className="max-w-screen flex flex-wrap items-center justify-between mx-auto p-3">
         <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse" onClick={() => handleNavigation("")}>
             
             <span className="ml-20 self-center text-3xl font-semibold whitespace-nowrap dark:text-white">

@@ -26,7 +26,7 @@ const SearchBar = ({ showSearchBar, searchTerm, setSearchTerm, handleSearch }) =
               handleSearch();
             }
           }}
-          className="w-full py-3 pl-4 pr-10 text-white bg-gray-800/50 rounded-full 
+          className="w-full py-3 pl-4 pr-4 text-white bg-gray-800/50 rounded-full text-center
                     animate-fade-in-search placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
         />
         <button

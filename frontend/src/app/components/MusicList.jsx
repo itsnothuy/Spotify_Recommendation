@@ -4,7 +4,7 @@ import React from "react";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 
 
-const MusicList = ({ mood, recommendedSongs, fetched, onBack }) => {
+const MusicList = ({ mood, recommendedSongs, fetched, onBack, onSaveToLikedSongs}) => {
   return (
     <>
       
@@ -20,7 +20,7 @@ const MusicList = ({ mood, recommendedSongs, fetched, onBack }) => {
             </>
         )}
         <div
-            className="overflow-hidden p-4"
+            className="overflow-y-auto p-4"
             style={{ maxHeight: "700px", scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
             {recommendedSongs.map((song, index) => (
@@ -94,7 +94,8 @@ const MusicList = ({ mood, recommendedSongs, fetched, onBack }) => {
                 <div className="p-4 flex-shrink-0">
                   <button
                     onClick={() => {
-                      console.log(`Add song: ${song.title}`);
+                      console.log(`Add song: ${song.title} to the user playlist`);
+                      onSaveToLikedSongs(song.spotify_id);
                     }}
                     className="flex items-center justify-center w-8 h-8
                        rounded-full hover:bg-white hover:text-gray-800 text-white"

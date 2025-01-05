@@ -1,4 +1,4 @@
-// server/services/chatgptService.js
+// server/services/openaiService.js
 import axios from 'axios';
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -34,7 +34,7 @@ function parseJsonFromChatGPT(content) {
 export async function getSongRecommendations(userText, mood) {
   const systemPrompt = `
     You are a music expert. Based on the mood: "${mood}",
-    provide 5 song suggestions with title, artist, and album. 
+    provide 10 song suggestions with title, artist, and album. 
     The final result should be a JSON list with { "title", "artist", "album" } objects.
     [
       { "title": "...", "artist": "...", "album": "..." },
