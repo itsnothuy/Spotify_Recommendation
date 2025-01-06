@@ -9,7 +9,7 @@ import GradientBackground from "../GradientBackground";
 
 
 
-const BACKEND_URL = "http://localhost:60918";
+const BACKEND_URL = "http://localhost:3001";
 
 export default function Home() {
   const text = "MusicFinder ♪";
@@ -38,36 +38,62 @@ export default function Home() {
 
 
   // Fetch the access token when the component loads
-  useEffect(() => {
-    const fetchAccessToken = async () => {
-      try {
-        const response = await fetch(`${BACKEND_URL}/api/spotify/refresh-token`);
-        const data = await response.json();
-        console.log(`Access token ${accessToken}`)
-        setAccessToken(data.access_token); // Store the token for later use
-      } catch (error) {
-        console.error("Error fetching Spotify access token:", error);
-      }
-    };
-    fetchAccessToken();
-  }, []);
+  // useEffect(() => {
+  //   const fetchAccessToken = async () => {
+  //     try {
+  //       const response = await fetch(`${BACKEND_URL}/api/spotify/refresh-token`, {
+  //         credentials: 'include',
+  //       });
+  //       const data = await response.json();
+  //       console.log(`Access token ${accessToken}`)
+  //       setAccessToken(data.access_token); // Store the token for later use
+  //     } catch (error) {
+  //       console.error("Error fetching Spotify access token:", error);
+  //     }
+  //   };
+  //   fetchAccessToken();
+  // }, []);
+
+
+  // On mount:
+  // useEffect(() => {
+  //   const checkSpotifyAuth = async () => {
+  //     try {
+  //       const response = await fetch(`${BACKEND_URL}/api/spotify/me`, {
+  //         credentials: 'include',
+  //       });
+  //       // If response is OK, user is logged in
+  //       const data = await response.json();
+  //       // data might have user profile info or a boolean "isAuthenticated"
+  //     } catch (error) {
+  //       console.error("User not authenticated", error);
+  //     }
+  //   };
+  //   checkSpotifyAuth();
+  // }, []);
 
 
   // Function to save track to "Liked Songs"
   const onSaveToLikedSongs = async (trackId) => {
-    if (!accessToken) {
-      alert("You need to log in to Spotify first!");
-      return;
-    }
-
     try {
-      const response = await fetch(`${BACKEND_URL}/api/spotify/likeTrack`, {
+      // 1) Check if user is logged in
+      const meResponse = await fetch(`/api/spotify/me`, {
+        credentials: 'include',
+      });
+      if (!meResponse.ok) {
+        // If 401 or anything else, we do login
+        window.location.href = `/api/spotify/login`;
+        return;
+      }
+
+      // 2) If user is logged in, proceed to like the track
+      const response = await fetch(`/api/spotify/likeTrack`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ trackId }),
+        credentials: 'include', // send session cookie
       });
 
       const data = await response.json();
@@ -92,10 +118,11 @@ export default function Home() {
       setHideTitleAndSearch(true);
       setIsLoading(true);
 
-      const response = await fetch(`${BACKEND_URL}/api/spotify/mood`, {
+      const response = await fetch(`/api/spotify/mood`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: searchTerm }),
+        credentials: 'include',
       });
       const data = await response.json();
 

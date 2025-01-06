@@ -16,13 +16,22 @@ const PORT = process.env.PORT || 3000;
 
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true, // let cookies pass
+  })
+);
 app.use(bodyParser.json());
 app.use(
   session({
     secret: 'secret',
     resave: false,
     saveUninitialized: true,
+    cookie: {
+      sameSite: 'none',  // <--- if you want truly cross-site
+      secure: true,     // for local dev; in production you'd set true w/ HTTPS
+    },
   })
 );
 

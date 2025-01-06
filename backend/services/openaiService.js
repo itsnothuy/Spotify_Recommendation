@@ -34,7 +34,7 @@ function parseJsonFromChatGPT(content) {
 export async function getSongRecommendations(userText, mood) {
   const systemPrompt = `
     You are a music expert. Based on the mood: "${mood}",
-    provide 10 song suggestions with title, artist, and album. 
+    provide 2 song suggestions with title, artist, and album. 
     The final result should be a JSON list with { "title", "artist", "album" } objects.
     [
       { "title": "...", "artist": "...", "album": "..." },

@@ -2,7 +2,7 @@
 import axios from 'axios';
 import querystring from 'querystring';
 
-const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = process.env;
+const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI } = process.env;
 
 
 
@@ -42,7 +42,6 @@ async function getSpotifyAccessToken() {
     const data = response.data;
     spotifyAccessToken = data.access_token;
     tokenExpiryTime = Date.now() + data.expires_in * 1000;
-    
     return spotifyAccessToken;
   } catch (error) {
     console.error('Error fetching Spotify access token:', error.message);

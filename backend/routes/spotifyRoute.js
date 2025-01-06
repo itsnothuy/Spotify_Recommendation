@@ -15,13 +15,32 @@ const router = express.Router();
 
 // 1. Spotify Login Route
 router.get('/login', (req, res) => {
+  console.log('[GET /login] SESSION ID:', req.sessionID);
+  console.log('[GET /login] SESSION DATA:', req.session);
+
   const state = 'someRandomState'; // Optional state parameter for CSRF protection
   const loginUrl = getSpotifyLoginUrl(state);
   res.redirect(loginUrl);
 });
 
+router.get("/me", (req, res) => {
+  console.log('[GET /me] SESSION ID:', req.sessionID);
+  console.log('[GET /me] SESSION DATA:', req.session);
+
+  if (!req.session.spotifyAccessToken) {
+    return res.status(401).json({ error: "Not logged in" });
+  }
+  // Optionally, fetch user profile from Spotify 
+  // or just return { isAuthenticated: true }
+  res.json({ isAuthenticated: true });
+});
+
 // 2. Spotify Callback Route
 router.get('/callback', async (req, res) => {
+
+  console.log('[GET /callback] SESSION ID:', req.sessionID);
+  console.log('[GET /callback] SESSION DATA BEFORE storing tokens:', req.session);
+
   const { code, error } = req.query;
   if (error) {
     return res.status(400).send(`Spotify Authorization Error: ${error}`);
@@ -38,7 +57,8 @@ router.get('/callback', async (req, res) => {
     req.session.spotifyRefreshToken = tokenData.refresh_token;
     req.session.spotifyTokenExpiresAt = Date.now() + tokenData.expires_in * 1000;
 
-    res.redirect('/?spotifyAuth=success');
+    console.log('[GET /refresh-token] AFTER REFRESH, SESSION DATA:', req.session);
+    return res.redirect('http://localhost:3000?spotifyAuth=success');
   } catch (err) {
     console.error('Callback error:', err.message);
     res.status(500).send('Internal Server Error');
@@ -47,6 +67,9 @@ router.get('/callback', async (req, res) => {
 
 // 3. Refresh Spotify Token
 router.get('/refresh-token', async (req, res) => {
+  console.log('[GET /refresh-token] SESSION ID:', req.sessionID);
+  console.log('[GET /refresh-token] SESSION DATA:', req.session);
+
   const refreshToken = req.session.spotifyRefreshToken;
   if (!refreshToken) {
     return res.status(400).json({ error: 'No refresh token found' });
@@ -57,6 +80,7 @@ router.get('/refresh-token', async (req, res) => {
     req.session.spotifyAccessToken = tokenData.access_token;
     req.session.spotifyTokenExpiresAt = Date.now() + tokenData.expires_in * 1000;
 
+    console.log('[GET /refresh-token] AFTER REFRESH, SESSION DATA:', req.session);
     res.json({ access_token: tokenData.access_token });
   } catch (err) {
     console.error('Error refreshing token:', err.message);
@@ -66,6 +90,9 @@ router.get('/refresh-token', async (req, res) => {
 
 // 4. Like Track Route
 router.post('/likeTrack', async (req, res) => {
+  console.log('[POST /likeTrack] SESSION ID:', req.sessionID);
+  console.log('[POST /likeTrack] SESSION DATA BEFORE liking track:', req.session);
+
   const { trackId } = req.body;
   if (!trackId) {
     return res.status(400).json({ error: 'trackId is required' });
@@ -77,14 +104,23 @@ router.post('/likeTrack', async (req, res) => {
 
   // Refresh token if expired
   if (Date.now() > tokenExpiresAt) {
-    const tokenData = await refreshUserToken(refreshToken);
-    accessToken = tokenData.access_token;
-    req.session.spotifyAccessToken = accessToken;
-    req.session.spotifyTokenExpiresAt = Date.now() + tokenData.expires_in * 1000;
+    try {
+      const tokenData = await refreshUserToken(refreshToken);
+      accessToken = tokenData.access_token;
+      req.session.spotifyAccessToken = accessToken;
+      req.session.spotifyTokenExpiresAt = Date.now() + tokenData.expires_in * 1000;
+
+      console.log('[POST /likeTrack] AFTER REFRESH, SESSION DATA:', req.session);
+    } catch (err) {
+      console.error('Error refreshing token during likeTrack:', err.message);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
   }
 
   try {
     const result = await likeTrack(accessToken, trackId);
+    console.log('[POST /likeTrack] Like track result:', result);
+
     res.json(result);
   } catch (err) {
     console.error('Error liking track:', err.message);
@@ -95,6 +131,9 @@ router.post('/likeTrack', async (req, res) => {
 
 // 5. Add Track to Playlist
 router.post('/addToPlaylist', async (req, res) => {
+  console.log('[POST /addToPlaylist] SESSION ID:', req.sessionID);
+  console.log('[POST /addToPlaylist] SESSION DATA BEFORE adding to playlist:', req.session);
+
   const { playlistId, trackUri } = req.body;
   if (!playlistId || !trackUri) {
     return res.status(400).json({ error: 'Missing playlistId or trackUri' });
@@ -106,14 +145,23 @@ router.post('/addToPlaylist', async (req, res) => {
 
   // Refresh token if expired
   if (Date.now() > tokenExpiresAt) {
-    const tokenData = await refreshUserToken(refreshToken);
-    accessToken = tokenData.access_token;
-    req.session.spotifyAccessToken = accessToken;
-    req.session.spotifyTokenExpiresAt = Date.now() + tokenData.expires_in * 1000;
+    try {
+      const tokenData = await refreshUserToken(refreshToken);
+      accessToken = tokenData.access_token;
+      req.session.spotifyAccessToken = accessToken;
+      req.session.spotifyTokenExpiresAt = Date.now() + tokenData.expires_in * 1000;
+
+      console.log('[POST /addToPlaylist] AFTER REFRESH, SESSION DATA:', req.session);
+    } catch (err) {
+      console.error('Error refreshing token during addToPlaylist:', err.message);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
   }
 
   try {
     const result = await addToPlaylist(accessToken, playlistId, trackUri);
+    console.log('[POST /addToPlaylist] Add track result:', result);
+
     res.json(result);
   } catch (err) {
     console.error('Error adding track to playlist:', err.message);
@@ -123,6 +171,9 @@ router.post('/addToPlaylist', async (req, res) => {
 
 // 6. Mood-Based Recommendations
 router.post('/mood', async (req, res) => {
+  console.log('[POST /mood] SESSION ID:', req.sessionID);
+  console.log('[POST /mood] SESSION DATA:', req.session);
+  
   const { text } = req.body;
 
   if (!text) {
