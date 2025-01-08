@@ -30,7 +30,7 @@ app.use(
     saveUninitialized: true,
     cookie: {
       sameSite: 'none',  // <--- if you want truly cross-site
-      secure: true,     // for local dev; in production you'd set true w/ HTTPS
+      secure: false,     // for local dev; in production you'd set true w/ HTTPS
     },
   })
 );
