@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: musicfinder-ingress
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    networking.gke.io/managed-certificates: "musicfinder-cert"
+spec:
+  ingressClassName: "gce"
+  rules:
+    - host: musicfinder.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: musicfinder-service
+                port:
+                  number: 80
+
+

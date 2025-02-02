@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: musicfinder-cert
+spec:
+  domains:
+    - "musicfinder.app"

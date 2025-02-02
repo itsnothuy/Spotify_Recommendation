@@ -16,9 +16,11 @@ const PORT = process.env.PORT || 3000;
 
 
 // Middleware
+app.set('trust proxy', 1);
+
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://musicfinder.app',
     credentials: true, // let cookies pass
   })
 );
@@ -30,7 +32,7 @@ app.use(
     saveUninitialized: true,
     cookie: {
       sameSite: 'none',  // <--- if you want truly cross-site
-      secure: false,     // for local dev; in production you'd set true w/ HTTPS
+      secure: true,     // for local dev; in production you'd set true w/ HTTPS
     },
   })
 );

@@ -90,6 +90,7 @@ export async function detectEmotion(text) {
   try {
     // Instead of Hugging Face Inference API, call our local Python endpoint.
     // (Assume Python is running on localhost:8000)
+    // const response = await axios.post('http://python-fastapi-service/predict', { text });
     const response = await axios.post('http://localhost:8000/predict', { text });
     const detectedEmotion = response.data.emotion; // e.g., "joy"
 

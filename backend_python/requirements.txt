@@ -1,5 +1,8 @@
 fastapi==0.103.0
 uvicorn==0.23.2
-transformers==4.33.2
+transformers==4.27.4
 torch==2.0.1
 pydantic==1.10.12
+sentencepiece
+numpy<2.0
+pybind11>=2.12

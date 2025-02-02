@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-nginx-config
+data:
+  default.conf: |
+    server {
+        listen 80;
+
+        # Route /api requests to the Node.js backend
+        location /api/ {
+            proxy_pass http://127.0.0.1:3001/api/;
+        }
+
+        # All other requests go to the Next.js frontend
+        location / {
+            proxy_pass http://127.0.0.1:3000/;
+        }
+    }

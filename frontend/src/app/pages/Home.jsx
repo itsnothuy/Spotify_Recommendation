@@ -8,9 +8,6 @@ import SearchBar from "../components/SearchBar";
 import GradientBackground from "../GradientBackground";
 
 
-
-const BACKEND_URL = "http://localhost:3001";
-
 export default function Home() {
   const text = "MusicFinder ♪";
   const [showSearchBar, setShowSearchBar] = useState(false);

@@ -58,7 +58,7 @@ router.get('/callback', async (req, res) => {
     req.session.spotifyTokenExpiresAt = Date.now() + tokenData.expires_in * 1000;
 
     console.log('[GET /refresh-token] AFTER REFRESH, SESSION DATA:', req.session);
-    return res.redirect('http://localhost:3000?spotifyAuth=success');
+    return res.redirect('https://musicfinder.app?spotifyAuth=success');
   } catch (err) {
     console.error('Callback error:', err.message);
     res.status(500).send('Internal Server Error');

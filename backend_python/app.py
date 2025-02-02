@@ -1,4 +1,11 @@
 # app.py (Python 3, FastAPI)
+import warnings
+from transformers.utils import logging as hf_logging
+
+# Suppress future warnings and Transformers logs
+warnings.filterwarnings("ignore", category=FutureWarning)
+hf_logging.set_verbosity_error()
+
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from transformers import T5Tokenizer, T5ForConditionalGeneration
@@ -11,7 +18,7 @@ app = FastAPI()
 
 # Load your model and tokenizer once
 model_name = "mrm8488/t5-base-finetuned-emotion"
-tokenizer = T5Tokenizer.from_pretrained(model_name)
+tokenizer = T5Tokenizer.from_pretrained(model_name, legacy=False)
 model = T5ForConditionalGeneration.from_pretrained(model_name)
 
 @app.post("/predict")
@@ -33,3 +40,7 @@ async def predict_emotion(payload: TextInput):
     # "decoded_output" might be something like "joy" or "sadness"
     
     return { "emotion": decoded_output }
+
+@app.get("/")
+async def root():
+    return {"message": "OK"}

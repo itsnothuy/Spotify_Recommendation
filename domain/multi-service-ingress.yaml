@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: multi-service-ingress
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    networking.gke.io/managed-certificates: "musicfinder-managed-cert-3"
+spec:
+  rules:
+    - host: node.musicfinder.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: node-backend-service
+                port:
+                  number: 80
+    - host: fastapi.musicfinder.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: python-fastapi-service
+                port:
+                  number: 80
+    - host: frontend.musicfinder.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: next-frontend-service
+                port:
+                  number: 80

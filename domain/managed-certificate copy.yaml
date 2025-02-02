@@ -1,0 +1,9 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: musicfinder-managed-cert-3
+spec:
+  domains:
+    - node.musicfinder.app
+    - fastapi.musicfinder.app
+    - frontend.musicfinder.app
