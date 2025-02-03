@@ -10,7 +10,8 @@ import React from "react";
  */
 const Tile = ({ text, textDelay = 50 }) => {
   return (
-    <h1 className="text-white text-5xl font-bold font-sans text-center"
+    <h1 className="text-white font-bold font-sans text-center 
+                   md:text-3xl lg:text-3xl xl:text-5xl text-2xl"
     >
       {text.split("").map((char, index) => (
         <span

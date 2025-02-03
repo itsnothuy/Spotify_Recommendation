@@ -14,7 +14,7 @@ const SearchBar = ({ showSearchBar, searchTerm, setSearchTerm, handleSearch }) =
   if (!showSearchBar) return null;
 
   return (
-    <div className="mt-8 w-full max-w-md z-10 ">
+    <div className="w-full max-w-md px-6 mx-auto">
       <div className="relative">
         <input
           type="text"

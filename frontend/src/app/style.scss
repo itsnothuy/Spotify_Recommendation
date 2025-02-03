@@ -2,7 +2,10 @@ html, body {
     font-family: 'Dongle', sans-serif;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow-x: hidden;
+    background-color: #000; 
+  /* Tells iOS Safari we prefer dark mode styling (optional) */
+    color-scheme: purple;
   }
   
   .text-container {
@@ -117,7 +120,8 @@ html, body {
   .gradient-bg {
     width: 100vw;
     height: 100vh;
-    position: relative;
+    z-index: -1;
+    position: fixed;
     overflow: hidden;
     background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));
   

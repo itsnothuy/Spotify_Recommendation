@@ -1,38 +1,62 @@
+// export default MusicList;
 "use client";
-
 import React from "react";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 
-
-const MusicList = ({ mood, recommendedSongs, fetched, onBack, onSaveToLikedSongs}) => {
+const MusicList = ({ mood, recommendedSongs, fetched, onBack, onSaveToLikedSongs }) => {
   return (
     <>
-      
-        
       {fetched && recommendedSongs.length > 0 && (
-        <div className="absolute container mt-4 flex flex-col items-center justify-center ">
+        <div className="container mx-auto px-4 py-12 flex flex-col items-center">
+          {/* If not already in your <head>, ensure you have:
+              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          */}
+
           {mood && (
             <>
-            <h1 className=" text-white text-5xl font-bold font-sans text-center animate-slide-up">Here's your curated list</h1>
-            <p className="text-white mt-4 items-center">
+              {/* Headline: smaller on narrow screens, bigger on medium/large */}
+              <h1 className="text-white font-bold font-sans text-center animate-slide-up text-2xl sm:text-3xl md:text-4xl">
+                Here's your curated list
+              </h1>
+
+              {/* Subtext: also smaller on narrow screens */}
+              <p className="text-white mt-3 text-sm sm:text-base md:text-lg">
                 You seem to be: <strong>{mood}</strong>
-            </p>
+              </p>
             </>
-        )}
-        <div
-            className="overflow-y-auto p-4"
-            style={{ maxHeight: "700px", scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
+          )}
+
+          {/* Scrollable container for the list. On smaller screens, narrower & shorter. */}
+          <div
+            className="
+              w-full 
+              max-w-md sm:max-w-xl
+              mt-6 
+              overflow-y-auto
+              p-4
+              border border-transparent
+            "
+            style={{
+              maxHeight: "70vh", // Limits height to 70% of the viewport, so heading/back button are visible
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
             {recommendedSongs.map((song, index) => (
               <a
                 key={index}
                 href="#"
-                className="flex flex-col items-center bg-white border border-gray-200 rounded-2xl shadow
-                  md:flex-row md:max-w-xl hover:bg-gray-100/70 dark:border-gray-700 dark:bg-gray-800/50 dark:hover:bg-gray-700
-                  mb-3 mt-2 duration-500 opacity-0 animate-slide-up"
-                style={{ animationDelay: `${index * 0.1}s`} } // optional stagger delay
+                className="
+                  w-full flex items-center 
+                  bg-white border border-gray-200 rounded-2xl shadow 
+                  hover:bg-gray-100/70 dark:border-gray-700 dark:bg-gray-800/50 dark:hover:bg-gray-700
+                  mb-3 mt-2 duration-500 opacity-0 animate-slide-up
+                "
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="relative w-24 h-22 ml-3 flex-shrink-0">
+                {/* Album Art: smaller on mobile, bigger on md */}
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 ml-3 flex-shrink-0">
                   <img
                     className="object-cover w-full h-full rounded-lg"
                     src={song.album_art_url}
@@ -46,69 +70,71 @@ const MusicList = ({ mood, recommendedSongs, fetched, onBack, onSaveToLikedSongs
                       position: "absolute",
                       bottom: "5px",
                       right: "8px",
-                      width: "20px",
-                      height: "20px",
+                      width: "16px",
+                      height: "16px",
                       backgroundColor: "#000",
-                      boxShadow: "0 2px 3px rgba(0,0,0,0.2)"
+                      boxShadow: "0 2px 3px rgba(0,0,0,0.2)",
                     }}
                   />
                 </div>
 
-                <div className="flex flex-col justify-between p-4 leading-normal w-full">
+                {/* Text Container: flex-1 + truncate to prevent pushing the plus icon */}
+                <div className="flex-1 flex flex-col p-4 leading-normal overflow-hidden">
                   <h5
-                    className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"
-                    style={{
-                      display: "inline-block",
-                      maxWidth: "300px",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
+                    className="
+                      text-sm sm:text-base md:text-lg
+                      font-bold tracking-tight text-gray-900 dark:text-white
+                      mb-1
+                      truncate whitespace-nowrap overflow-hidden text-ellipsis
+                    "
                   >
-                    <span
-                      className={song.title.length > 30 ? "inline-block animate-scroll-text" : ""}
-                      style={{ animationDelay: "5s" }}
-                    >
-                      {song.title}
-                    </span>
+                    {song.title}
                   </h5>
-
-                  <p className="mb-1 font-normal text-gray-700 dark:text-gray-400">
+                  <p
+                    className="
+                      text-xs sm:text-sm md:text-base font-normal
+                      text-gray-700 dark:text-gray-400
+                      truncate whitespace-nowrap overflow-hidden text-ellipsis
+                    "
+                  >
                     Artist: {song.artist}
                   </p>
-
                   <p
-                    className="font-normal text-gray-700 dark:text-gray-400"
-                    style={{
-                      display: "inline-block",
-                      maxWidth: "300px",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
+                    className="
+                      text-xs sm:text-sm md:text-base font-normal
+                      text-gray-700 dark:text-gray-400 mt-1
+                      truncate whitespace-nowrap overflow-hidden text-ellipsis
+                    "
                   >
                     Album: {song.album}
                   </p>
                 </div>
 
+                {/* Plus Button: pinned on the far right, won't shrink */}
                 <div className="p-4 flex-shrink-0">
                   <button
                     onClick={() => {
-                      console.log(`Add song: ${song.title} to the user playlist`);
                       onSaveToLikedSongs(song.spotify_id);
                     }}
-                    className="flex items-center justify-center w-8 h-8
-                       rounded-full hover:bg-white hover:text-gray-800 text-white"
+                    className="
+                      flex items-center justify-center
+                      w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8
+                      rounded-full hover:bg-white hover:text-gray-800 text-white
+                    "
                   >
-                    <PlusCircledIcon className="w-12 h-12" />
+                    <PlusCircledIcon className="w-full h-full" />
                   </button>
                 </div>
               </a>
             ))}
           </div>
 
-          <button className="text-white mt-2 items-center" onClick={onBack}>
-              <u>Back</u>
+          {/* Back button below the list */}
+          <button
+            className="text-white mt-3 items-center"
+            onClick={onBack}
+          >
+            <u>Back</u>
           </button>
         </div>
       )}

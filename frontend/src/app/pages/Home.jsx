@@ -168,58 +168,132 @@ export default function Home() {
     return () => clearTimeout(timer);
   };
 
-  return (
-    <div className="fixed h-screen flex flex-col items-center justify-center inset-0" data-theme={currentTheme} >
-      <GradientBackground/>
-      {/* Only show the Title & SearchBar if hideTitleAndSearch is false */}
+  // return (
+  //   <div className="fixed inset-0 h-screen flex flex-col items-center justify-center" data-theme={currentTheme} >
+  //     <GradientBackground/>
+  //     {/* Only show the Title & SearchBar if hideTitleAndSearch is false */}
 
-      {!hideTitleAndSearch && (
-        <>
-        {/* {you should add the default background here} */}
-        <div className="absolute"
-          style={{
-            top: "35%",
-            left: "50%",
-            transform: "translate(-50%, -60%)",
-          }}
-        > 
-          <Tile text={text} />
+  //     {!hideTitleAndSearch && (
+  //       <>
+  //       {/* {you should add the default background here} */}
+  //       <div className="absolute top-[35%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]"
+  //       > 
+  //         <Tile text={text} />
+  //       </div>
+
+
+  //       {/* Conditionally show search bar after the title animation */}
+  //       {showSearchBar && (
+  //         <div
+  //           className="absolute top-[40%] left-[50%] transform -translate-x-[50%] -translate-y-[20%] w-full sm:w-[24rem] md:w-[28rem] lg:w-[32rem]"
+  //         >
+  //         <SearchBar
+  //           showSearchBar={showSearchBar}
+  //           searchTerm={searchTerm}
+  //           setSearchTerm={setSearchTerm}
+  //           handleSearch={handleSearch}
+  //         />
+  //         </div>
+  //       )}
+  //       </>
+  //     )}
+
+  //     {/* If we’re loading, show loading page; otherwise show MusicList */}
+  //     {isLoading ? (
+  //       <LoadingPage/>
+  //     ) : (
+  //       <MusicList 
+  //         mood={mood} 
+  //         recommendedSongs={recommendedSongs} 
+  //         fetched={fetched} 
+  //         onBack={handleBack}
+  //         onSaveToLikedSongs={onSaveToLikedSongs}
+  //       />
+  //     )}
+  //   </div>
+  // );
+
+  return (
+    <>
+      {/* 1) Outer container: relative, min-h-screen so we can scroll if needed */}
+      <div className="relative min-h-screen w-full" data-theme={currentTheme}>
+        {/* 2) Gradient background absolutely behind everything, z-[-1] */}
+        <div className="absolute inset-0 -z-10">
+          <GradientBackground />
         </div>
 
+        {/** 
+         * 2) "Hero" container for Title & SearchBar 
+         *    Absolutely positioned so it appears centered like before
+         */}
+        {!hideTitleAndSearch && (
+          <div className="relative h-screen">
+            {/* The Title */}
+            <div
+              className="
+                absolute 
+                top-[35%] left-[50%] 
+                transform -translate-x-[50%] -translate-y-[50%]
+              "
+            >
+              <Tile text={text} />
+            </div>
 
-        {/* Conditionally show search bar after the title animation */}
-        {showSearchBar && (
-          <div
-            className="absolute w-full sm:w-[24rem] md:w-[28rem] lg:w-[32rem]"
-            style={{
-              top: "37%",
-              left: "50%",
-              transform: "translate(-45%, -20%)",
-            }}
-          >
-          <SearchBar
-            showSearchBar={showSearchBar}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            handleSearch={handleSearch}
-          />
+            {/* The SearchBar (if it's time to show) */}
+            {showSearchBar && (
+              <div
+                className="
+                  absolute 
+                  top-[40%] left-[50%]
+                  transform -translate-x-[50%] -translate-y-[20%]
+                  w-full sm:w-[24rem] md:w-[28rem] lg:w-[32rem]
+                "
+              >
+                <SearchBar
+                  showSearchBar={showSearchBar}
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
+                  handleSearch={handleSearch}
+                />
+              </div>
+            )}
           </div>
         )}
-        </>
-      )}
 
-      {/* If we’re loading, show loading page; otherwise show MusicList */}
-      {isLoading ? (
-        <LoadingPage/>
-      ) : (
-        <MusicList 
-          mood={mood} 
-          recommendedSongs={recommendedSongs} 
-          fetched={fetched} 
-          onBack={handleBack}
-          onSaveToLikedSongs={onSaveToLikedSongs}
-        />
-      )}
-    </div>
+        {/* 3) Main content in normal flow */}
+        <div className="container mx-auto px-4 py-6 flex flex-col items-center">
+          {/* Title & Search */}
+          {/* {!hideTitleAndSearch && (
+            <>
+              <Tile text={text}/>
+              {showSearchBar && (
+                <div className="mt-4 w-full sm:w-[24rem] md:w-[28rem] lg:w-[32rem]">
+                  <SearchBar
+                    showSearchBar={showSearchBar}
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    handleSearch={handleSearch}
+                  />
+                </div>
+              )}
+            </>
+          )} */}
+
+          {/* Loading or Music list */}
+          {isLoading ? (
+            <LoadingPage />
+          ) : (
+            <MusicList
+              mood={mood}
+              recommendedSongs={recommendedSongs}
+              fetched={fetched}
+              onBack={handleBack}
+              onSaveToLikedSongs={onSaveToLikedSongs}
+            />
+          )}
+        </div>
+      </div>
+    </>
   );
+
 }
