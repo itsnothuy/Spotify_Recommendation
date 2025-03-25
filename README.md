@@ -18,8 +18,35 @@ An intelligent, full-stack music recommendation system powered by NLP, OpenAI, a
 
 ## 🧭 Architecture Overview
 
-<pre lang="markdown"> \`\`\`plaintext +----------------------+ | Frontend (React) | +----------+-----------+ | v +-------------+-------------+ | Node.js Backend | | (Express.js) | +------+------+-------------+ | | | v v v +-------------+ +---+--+ +---+---+ | OpenAI GPT | |Spotify| |OAuth | | Recommender | | API | | Login | +-------------+ +------+ +--------+ | v +-------+--------+ | Python FastAPI | | Microservice | +-------+--------+ | v +-------+--------+ | T5 Model | | (Emotion NLP) | +----------------+ \`\`\` </pre>
-
+```plaintext
+             +----------------------+
+             |   Frontend (React)   |
+             +----------+-----------+
+                        |
+                        v
+          +-------------+-------------+
+          |     Node.js Backend       |
+          |       (Express.js)        |
+          +------+------+-------------+
+                 |      |        |
+                 v      v        v
+   +-------------+  +---+--+  +---+---+
+   | OpenAI GPT  |  |Spotify|  |OAuth  |
+   | Recommender |  |  API  |  | Login |
+   +-------------+  +------+  +--------+
+                 |
+                 v
+         +-------+--------+
+         | Python FastAPI |
+         |   Microservice |
+         +-------+--------+
+                 |
+                 v
+         +-------+--------+
+         |   T5 Model     |
+         | (Emotion NLP)  |
+         +----------------+
+```
 > From user input to song output, this architecture combines microservices, GPT intelligence, and cloud-native deployment.
 
 ---
