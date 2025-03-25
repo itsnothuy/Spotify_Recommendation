@@ -56,9 +56,7 @@ This system is built for production-scale deployment with the following setup:
 
 ## 🔁 Full Workflow
 
-```plaintext
-User Input → Emotion Detection → GPT Song Suggestions → Spotify Search → Frontend Output
-```
+<pre lang="markdown"> \`\`\`plaintext +----------------------+ | Frontend (React) | +----------+-----------+ | v +-------------+-------------+ | Node.js Backend | | (Express.js) | +------+------+-------------+ | | | v v v +-------------+ +---+--+ +---+---+ | OpenAI GPT | |Spotify| |OAuth | | Recommender | | API | | Login | +-------------+ +------+ +--------+ | v +-------+--------+ | Python FastAPI | | Microservice | +-------+--------+ | v +-------+--------+ | T5 Model | | (Emotion NLP) | +----------------+ \`\`\` </pre>
 
 1. User types in a message about their mood.
 2. A FastAPI service uses a finetuned T5 model to detect emotion.
