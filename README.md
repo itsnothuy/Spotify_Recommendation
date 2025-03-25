@@ -219,7 +219,7 @@ The project includes a fully configured GitHub Actions pipeline:
 
 ## 🧑‍💻 Author
 
-**Your Name**  
+**Huy Tran**  
 Full-stack developer | AI Integrator | Cloud-native enthusiast
 
 ---
